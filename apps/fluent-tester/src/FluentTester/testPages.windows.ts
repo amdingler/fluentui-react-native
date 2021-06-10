@@ -10,6 +10,7 @@ import { HOMEPAGE_RADIOGROUP_BUTTON, RadioGroupTest } from './TestComponents/Rad
 import { HOMEPAGE_SEPARATOR_BUTTON, SeparatorTest } from './TestComponents/Separator';
 import { HOMEPAGE_TEXT_BUTTON, TextTest } from './TestComponents/Text';
 import { HOMEPAGE_THEME_BUTTON, ThemeTest } from './TestComponents/Theme';
+import { HOMEPAGE_NATIVEBUTTON_BUTTON, NativeButtonTest } from './TestComponents/NativeButton';
 
 export const tests = [
   {
@@ -60,4 +61,9 @@ export const tests = [
     component: CheckboxTest,
     testPage: HOMEPAGE_CHECKBOX_BUTTON,
   },
+  {
+    name: 'Native Button Test',
+    component: NativeButtonTest,
+    testPage: HOMEPAGE_NATIVEBUTTON_BUTTON,
+  }
 ];

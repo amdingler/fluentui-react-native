@@ -147,10 +147,16 @@
       <DeploymentContent>false</DeploymentContent>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\packages\experimental\NativeButton\windows\ReactNativeNativeButton\ReactNativeNativeButton.vcxproj">
+      <Project>{5639f854-9358-4c90-8bb6-c85f35f9bca2}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <PropertyGroup Label="ReactNativeWindowsNodeProps">
     <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == ''">$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'node_modules\react-native-windows\package.json'))\node_modules\react-native-windows\</ReactNativeWindowsDir>
-    <UseExperimentalNuget>true</UseExperimentalNuget> <!-- This will eventually default to true and this property should be removed -->
+    <UseExperimentalNuget>true</UseExperimentalNuget>
+    <!-- This will eventually default to true and this property should be removed -->
   </PropertyGroup>
   <ImportGroup Label="ReactNativeWindowsNodeTargets">
     <Import Project="$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppApp.props" Condition="Exists('$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppApp.props')" />
