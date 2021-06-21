@@ -17,6 +17,7 @@ export interface NativeButtonProps {
   isImageTinted?: boolean;
   /*
    * ButtonStyle wrapped enum
+   * (only works for macOS and iOS)
    */
   buttonStyle?: NativeButtonStyle;
   /*

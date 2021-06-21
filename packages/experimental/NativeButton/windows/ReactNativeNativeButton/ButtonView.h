@@ -16,15 +16,20 @@ namespace winrt::ReactNativeNativeButton::implementation {
     private:
         Microsoft::ReactNative::IReactContext m_reactContext{ nullptr };
         bool m_updating{ false };
-        // xaml::Controls::CalendarDatePicker::DateChanged_revoker m_dataPickerDateChangedRevoker{};
-
+        xaml::Controls::Button::Click_revoker m_buttonClickRevoker{};
         void RegisterEvents();
-        // void OnDateChanged(winrt::Windows::Foundation::IInspectable const& sender, xaml::Controls::CalendarDatePickerDateChangedEventArgs const& args);
-        // winrt::Windows::Foundation::DateTime DateTimeFrom(int64_t timeInMilliSeconds, int64_t timeZoneOffsetInSeconds);
-        // int64_t DateTimeToMiliseconds(winrt::Windows::Foundation::DateTime dateTime, int64_t timeZoneOffsetInSeconds);
+        void OnPress(winrt::Windows::Foundation::IInspectable const& sender, xaml::RoutedEventArgs const& args);
 
-        // int64_t m_selectedTime, m_maxTime, m_minTime; // These values are expected to be in milliseconds.
-        // int64_t m_timeZoneOffsetInSeconds = 0;        // Timezone offset is expected to be in seconds.
+        xaml::Media::Brush m_accentColor{ nullptr };
+        xaml::Media::SolidColorBrush m_transparentBrush{ winrt::Windows::UI::Colors::Transparent() };
+        xaml::Media::SolidColorBrush m_neutralInverted{ winrt::Windows::UI::ColorHelper::FromArgb(255,255,255,255) };
+        xaml::Media::SolidColorBrush m_brandForegroundDisabled{ winrt::Windows::UI::ColorHelper::FromArgb(64,37,37,37) };
+        xaml::Media::SolidColorBrush m_brandBackgroundDisabled{ winrt::Windows::UI::ColorHelper::FromArgb(64,37,37,37) };
+        xaml::Media::SolidColorBrush m_neutralBackground2{ winrt::Windows::UI::ColorHelper::FromArgb(255,255,255,255) };
+        xaml::Media::SolidColorBrush m_neutralStroke2{ winrt::Windows::UI::ColorHelper::FromArgb(38,0,0,0) };
+        xaml::Media::SolidColorBrush m_neutralForeground3{ winrt::Windows::UI::ColorHelper::FromArgb(255,39,39,39) };
+        xaml::Media::SolidColorBrush m_neutralBackground3{ winrt::Windows::UI::ColorHelper::FromArgb(13,0,0,0) };
+
     };
 }
 

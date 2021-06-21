@@ -1,6 +1,4 @@
 module.exports = {
-  extends: ['@uifabricshared/eslint-config-rules'],
-  rules: {
-    '@typescript-eslint/no-var-requires': 0,
-  },
+  root: true,
+  extends: '@react-native-community',
 };

@@ -6,9 +6,14 @@
 #include <limits>
 #include <stdexcept>
 
+#include "winrt/Windows.UI.Xaml.Media.Imaging.h"
+
 namespace winrt {
     using namespace Microsoft::ReactNative;
     using namespace Windows::Foundation;
+    using namespace Windows::UI::Xaml::Media;
+    using namespace Windows::UI::Xaml::Media::Imaging;
+    using namespace Windows::UI::Xaml::Controls;
 }
 
 namespace winrt::ReactNativeNativeButton::implementation {
@@ -18,144 +23,120 @@ namespace winrt::ReactNativeNativeButton::implementation {
     }
 
     void ButtonView::RegisterEvents() {
-        // m_dataPickerDateChangedRevoker = this->DateChanged(winrt::auto_revoke,
-        //     [ref = get_weak()](auto const& sender, auto const& args) {
-        //     if (auto self = ref.get()) {
-        //         self->OnDateChanged(sender, args);
-        //     }
-        // });
+        m_buttonClickRevoker = this->Click(winrt::auto_revoke,
+            [ref = get_weak()](auto const& sender, auto const& args) {
+            if (auto self = ref.get()) {
+                self->OnPress(sender, args);
+            }
+        });
     }
 
     void ButtonView::UpdateProperties(winrt::IJSValueReader const& reader) {
         m_updating = true;
 
-        // bool updateSelectedDate = false;
-        // bool updateMaxDate = false;
-        // bool updateMinDate = false;
+        auto const& propertyMap = JSValueObject::ReadFrom(reader);
 
-        // auto const& propertyMap = JSValueObject::ReadFrom(reader);
+        for (auto const& pair : propertyMap) {
+            auto const& propertyName = pair.first;
+            auto const& propertyValue = pair.second;
 
-        // for (auto const& pair : propertyMap) {
-        //     auto const& propertyName = pair.first;
-        //     auto const& propertyValue = pair.second;
+            if (propertyName == "title") {
+                if (!propertyValue.IsNull()) {
+                    this->Content(winrt::box_value(to_hstring(propertyValue.AsString())));
+                }
+                else {
+                    this->Content(winrt::box_value(L""));
+                }
+            }
+            else if (propertyName == "image") {
+                if (!propertyValue.IsNull()) {
 
-        //     if (propertyName == "dayOfWeekFormat") {
-        //         if (propertyValue.IsNull()) {
-        //             this->ClearValue(xaml::Controls::CalendarDatePicker::DayOfWeekFormatProperty());
-        //         }
-        //         else {
-        //             this->DayOfWeekFormat(to_hstring(propertyValue.AsString()));
-        //         }
-        //     }
-        //     else if (propertyName == "dateFormat") {
-        //         if (propertyValue.IsNull()) {
-        //             this->ClearValue(xaml::Controls::CalendarDatePicker::DateFormatProperty());
-        //         }
-        //         else {
-        //             this->DateFormat(to_hstring(propertyValue.AsString()));
-        //         }
-        //     }
-        //     else if (propertyName == "firstDayOfWeek") {
-        //         if (propertyValue.IsNull()) {
-        //             this->ClearValue(xaml::Controls::CalendarDatePicker::FirstDayOfWeekProperty());
-        //         }
-        //         else {
-        //             auto firstDayOfWeek = propertyValue.AsInt32();
-        //             this->FirstDayOfWeek(static_cast<Windows::Globalization::DayOfWeek>(firstDayOfWeek));
-        //         }
-        //     }
-        //     else if (propertyName == "maxDate") {
-        //         if (propertyValue.IsNull()) {
-        //             this->ClearValue(xaml::Controls::CalendarDatePicker::MaxDateProperty());
-        //         }
-        //         else {
-        //             m_maxTime = propertyValue.AsInt64();
-        //             updateMaxDate = true;
-        //         }
-        //     }
-        //     else if (propertyName == "minDate") {
-        //         if (propertyValue.IsNull()) {
-        //             this->ClearValue(xaml::Controls::CalendarDatePicker::MinDateProperty());
-        //         }
-        //         else {
-        //             m_minTime = propertyValue.AsInt64();
-        //             updateMinDate = true;
-        //         }
-        //     }
-        //     else if (propertyName == "placeholderText") {
-        //         if (propertyValue.IsNull()) {
-        //             this->ClearValue(xaml::Controls::CalendarDatePicker::PlaceholderTextProperty());
-        //         }
-        //         else {
-        //             this->PlaceholderText(to_hstring(propertyValue.AsString()));
-        //         }
-        //     }
-        //     else if (propertyName == "selectedDate") {
-        //         if (propertyValue.IsNull()) {
-        //             this->ClearValue(xaml::Controls::CalendarDatePicker::DateProperty());
-        //         }
-        //         else {
-        //             m_selectedTime = propertyValue.AsInt64();
-        //             updateSelectedDate = true;
-        //         }
-        //     }
-        //     else if (propertyName == "timeZoneOffsetInSeconds") {
-        //         if (propertyValue.IsNull()) {
-        //             m_timeZoneOffsetInSeconds = 0;
-        //         }
-        //         else {
-        //             m_timeZoneOffsetInSeconds = propertyValue.AsInt64();
-        //         }
-        //     }
-        // }
+                    auto imgUriString = propertyValue.AsObject()["uri"].AsString();
+                    BitmapImage bitmap = BitmapImage(Uri(to_hstring(imgUriString)));
+                    Image imgB = Image();
+                    imgB.Source(bitmap);
+                    this->Content(imgB);
 
-        // if (updateMaxDate) {
-        //     this->MaxDate(DateTimeFrom(m_maxTime, m_timeZoneOffsetInSeconds));
-        // }
-        // if (updateMinDate) {
-        //     this->MinDate(DateTimeFrom(m_minTime, m_timeZoneOffsetInSeconds));
-        // }
-        // if (updateSelectedDate) {
-        //     this->Date(DateTimeFrom(m_selectedTime, m_timeZoneOffsetInSeconds));
-        // }
+                }
+            }
+            else if (propertyName == "buttonStyle") {
+                if (!propertyValue.IsNull()) {
+                    auto style = propertyValue.AsString();
+                    auto resDict = this->Resources();
+
+                    if (style == "primary") {
+                        resDict.Insert(winrt::box_value(L"ButtonForeground"), m_neutralInverted);
+                        resDict.Insert(winrt::box_value(L"ButtonForegroundPressed"), m_neutralInverted);
+                        resDict.Insert(winrt::box_value(L"ButtonForegroundDisabled"), m_brandForegroundDisabled);
+                        resDict.Insert(winrt::box_value(L"ButtonBackground"), m_accentColor);
+                        resDict.Insert(winrt::box_value(L"ButtonBackgroundPressed"), m_accentColor);
+                        resDict.Insert(winrt::box_value(L"ButtonBackgroundDisabled"), m_brandBackgroundDisabled);
+                        resDict.Insert(winrt::box_value(L"ButtonBorderBrush"), m_transparentBrush);
+                        resDict.Insert(winrt::box_value(L"ButtonBorderBrushPressed"), m_transparentBrush);
+                        resDict.Insert(winrt::box_value(L"ButtonBorderBrushDisabled"), m_transparentBrush);
+                    }
+                    else if (style == "secondary") {
+                        resDict.Insert(winrt::box_value(L"ButtonForegroundPressed"), m_neutralInverted);
+                        resDict.Insert(winrt::box_value(L"ButtonBackground"), m_neutralBackground2);
+                        resDict.Insert(winrt::box_value(L"ButtonBackgroundPressed"), m_accentColor);
+                        resDict.Insert(winrt::box_value(L"ButtonBackgroundDisabled"), m_neutralBackground2);
+                        resDict.Insert(winrt::box_value(L"ButtonBorderBrush"), m_neutralStroke2);
+                        resDict.Insert(winrt::box_value(L"ButtonBorderBrushPressed"), m_transparentBrush);
+                        resDict.Insert(winrt::box_value(L"ButtonBorderBrushDisabled"), m_neutralStroke2);
+                    }
+                    else if (style == "borderless") {
+                        resDict.Insert(winrt::box_value(L"ButtonForeground"), m_accentColor);
+                        resDict.Insert(winrt::box_value(L"ButtonForegroundPointerOver"), m_accentColor);
+                        resDict.Insert(winrt::box_value(L"ButtonForegroundPressed"), m_accentColor);
+                        resDict.Insert(winrt::box_value(L"ButtonForegroundDisabled"), m_brandForegroundDisabled);
+                        resDict.Insert(winrt::box_value(L"ButtonBackground"), m_transparentBrush);
+                        resDict.Insert(winrt::box_value(L"ButtonBackgroundPointerOver"), m_transparentBrush);
+                        resDict.Insert(winrt::box_value(L"ButtonBackgroundPressed"), m_transparentBrush);
+                        resDict.Insert(winrt::box_value(L"ButtonBackgroundDisabled"), m_transparentBrush);
+                        resDict.Insert(winrt::box_value(L"ButtonBorderBrush"), m_transparentBrush);
+                        resDict.Insert(winrt::box_value(L"ButtonBorderBrushPointerOver"), m_transparentBrush);
+                        resDict.Insert(winrt::box_value(L"ButtonBorderBrushPressed"), m_transparentBrush);
+                        resDict.Insert(winrt::box_value(L"ButtonBorderBrushDisabled"), m_transparentBrush);
+                    }
+                }
+            }
+            else if (propertyName == "enabled") {
+                if (!propertyValue.IsNull()) {
+                    this->IsEnabled(propertyValue.AsBoolean());
+                }
+                else {
+                    this->IsEnabled(true);
+                }
+            }
+            else if (propertyName == "toolTip") {
+                if (!propertyValue.IsNull()) {
+
+                    auto self = this->try_as<xaml::Controls::Button>();
+
+                    ToolTip toolTip = ToolTip();
+                    toolTip.Content(winrt::box_value(to_hstring(propertyValue.AsString())));
+                    ToolTipService::SetToolTip(self, toolTip);
+                }
+            }
+            else if (propertyName == "accentColor") {
+                if (!propertyValue.IsNull()) {
+                    m_accentColor = propertyValue.To<winrt::Brush>();
+                }
+            }
+        }
+
 
         m_updating = false;
     }
 
-    // void ButtonView::OnDateChanged(winrt::IInspectable const& /*sender*/, xaml::Controls::CalendarDatePickerDateChangedEventArgs const& args){
-    //     if (!m_updating && args.NewDate() != nullptr) {
-    //         auto timeInMilliseconds = DateTimeToMiliseconds(args.NewDate().Value(), m_timeZoneOffsetInSeconds);
+    void ButtonView::OnPress(winrt::IInspectable const& sender, xaml::RoutedEventArgs const& args){
+        if (!m_updating) {
 
-    //         m_reactContext.DispatchEvent(
-    //             *this,
-    //             L"topChange",
-    //             [&](winrt::Microsoft::ReactNative::IJSValueWriter const& eventDataWriter) noexcept {
-    //             eventDataWriter.WriteObjectBegin();
-    //             {
-    //                 WriteProperty(eventDataWriter, L"newDate", timeInMilliseconds);
-    //             }
-    //             eventDataWriter.WriteObjectEnd();
-    //         });
-    //     }
-    // }
-
-    // winrt::DateTime DateTimePickerView::DateTimeFrom(int64_t timeInMilliSeconds, int64_t timeZoneOffsetInSeconds) {
-    //     const auto timeInSeconds = timeInMilliSeconds / 1000;
-    //     time_t ttWithTimeZoneOffset = static_cast<time_t>(timeInSeconds) + timeZoneOffsetInSeconds;
-    //     winrt::DateTime dateTime = winrt::clock::from_time_t(ttWithTimeZoneOffset);
-
-    //     return dateTime;
-    // }
-
-    // int64_t DateTimePickerView::DateTimeToMiliseconds(winrt::DateTime dateTime, int64_t timeZoneOffsetInSeconds) {
-    //     const time_t ttInSeconds = winrt::clock::to_time_t(dateTime);
-    //     auto timeInUtc = ttInSeconds - timeZoneOffsetInSeconds;
-    //     if (std::numeric_limits<int64_t>::max() / 1000 < timeInUtc) {
-    //         throw new std::overflow_error("Provided date value is too large.");
-    //     }
-    //     auto ttInMilliseconds = static_cast<int64_t>(timeInUtc) * 1000;
-
-    //     return ttInMilliseconds;
-    // }
+            m_reactContext.DispatchEvent(
+                *this,
+                L"topPress",
+                [&](winrt::Microsoft::ReactNative::IJSValueWriter const& eventDataWriter) noexcept {});
+        }
+    }
 
 }

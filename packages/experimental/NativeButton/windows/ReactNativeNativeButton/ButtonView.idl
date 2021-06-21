@@ -6,9 +6,4 @@ namespace ReactNativeNativeButton{
         void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader);
     };
 
-    //[default_interface]
-    //runtimeclass TimePickerView : Windows.UI.Xaml.Controls.TimePicker {
-    //    TimePickerView(Microsoft.ReactNative.IReactContext context);
-    //    void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader);
-    //};
 }

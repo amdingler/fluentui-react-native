@@ -6,16 +6,16 @@
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   IgnorableNamespaces="uap mp">
 
- <Identity
-    Name="2a07a99c-7130-4e93-856d-880ea22dd4f4"
-    Publisher="CN=jasonmo"
+  <Identity
+    Name="7c4ca150-ac24-4ae4-bdd0-b0001d0c654c"
+    Publisher="CN=t-adingler"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="2a07a99c-7130-4e93-856d-880ea22dd4f4" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="7c4ca150-ac24-4ae4-bdd0-b0001d0c654c" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>FluentTester</DisplayName>
-    <PublisherDisplayName>jasonmo</PublisherDisplayName>
+    <DisplayName>windowstester</DisplayName>
+    <PublisherDisplayName>t-adingler</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -28,14 +28,15 @@
   </Resources>
 
   <Applications>
-    <Application Id="App"
+    <Application
+      Id="App"
       Executable="$targetnametoken$.exe"
-      EntryPoint="FluentTester.App">
+      EntryPoint="windowstester.App">
       <uap:VisualElements
-        DisplayName="FluentTester"
+        DisplayName="windowstester"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
-        Description="FluentTester"
+        Description="windowstester"
         BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />

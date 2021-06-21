@@ -2,10 +2,9 @@
 #include "ReactPackageProvider.h"
 #include "NativeModules.h"
 
-
 using namespace winrt::Microsoft::ReactNative;
 
-namespace winrt::FluentTester::implementation
+namespace winrt::windowstester::implementation
 {
 
 void ReactPackageProvider::CreatePackage(IReactPackageBuilder const &packageBuilder) noexcept
@@ -13,6 +12,4 @@ void ReactPackageProvider::CreatePackage(IReactPackageBuilder const &packageBuil
     AddAttributedModules(packageBuilder);
 }
 
-} // namespace winrt::FluentTester::implementation
-
-
+} // namespace winrt::windowstester::implementation

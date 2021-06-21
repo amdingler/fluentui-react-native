@@ -36,13 +36,10 @@ namespace winrt::ReactNativeNativeButton::implementation {
     IMapView<hstring, ViewManagerPropertyType> ButtonViewManager::NativeProps() noexcept {
         auto nativeProps = winrt::single_threaded_map<hstring, ViewManagerPropertyType>();
 
-        // TODO: fix these props
         nativeProps.Insert(L"title", ViewManagerPropertyType::String);
-        nativeProps.Insert(L"image", ViewManagerPropertyType::Array);
+        nativeProps.Insert(L"image", ViewManagerPropertyType::Map);
         nativeProps.Insert(L"accentColor", ViewManagerPropertyType::Color);
-        nativeProps.Insert(L"onPress", ViewManagerPropertyType::String);
-        nativeProps.Insert(L"isImageTinted", ViewManagerPropertyType::Boolean);
-        nativeProps.Insert(L"buttonStyle", ViewManagerPropertyType::Map);
+        nativeProps.Insert(L"buttonStyle", ViewManagerPropertyType::String);
         nativeProps.Insert(L"enabled", ViewManagerPropertyType::Boolean);
         nativeProps.Insert(L"toolTip", ViewManagerPropertyType::String);
 
@@ -66,6 +63,7 @@ namespace winrt::ReactNativeNativeButton::implementation {
     ConstantProviderDelegate ButtonViewManager::ExportedCustomDirectEventTypeConstants() noexcept {
         return [](winrt::IJSValueWriter const& constantWriter) {
             WriteCustomDirectEventTypeConstant(constantWriter, "onChange");
+            WriteCustomDirectEventTypeConstant(constantWriter, L"topPress");
         };
     }
 

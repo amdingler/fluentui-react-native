@@ -14,12 +14,15 @@ export type AvatarStyle = 'circle' | 'square';
 
 export type Presence = 'none' | 'available' | 'away' | 'doNotDisturb' | 'outOfOffice' | 'offline' | 'unknown' | 'unknown' | 'blocked';
 
+// TODO: what?
 interface ExportedConstants {
   sizes: { [key in Size]: number };
 }
 
 const ExportedNativeConstants: ExportedConstants = NativeModules.MSFAvatarViewManager;
 
+
+// Base props for the control
 export type AvatarData = {
   /**
    * The primary text to create initials with (e.g. a name)
@@ -116,6 +119,8 @@ export type AvatarTokens = {
   size?: Size;
 };
 
+// TODO: how do we handle these on the native side?
+// Does FURN decide which one should be sent?
 const tokensThatAreAlsoProps: (keyof AvatarTokens)[] = ['size'];
 
 // The Javascript API is a flat list for all the props we can set on our component
@@ -137,6 +142,7 @@ export const Avatar = compose<AvatarType>({
   displayName: avatarName,
   tokens: [
     {
+      // Tokens need default values
       size: 'small',
     },
     avatarName,
